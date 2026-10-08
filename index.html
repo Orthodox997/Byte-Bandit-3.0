@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090b10">
+<meta name="description" content="Byte Bandits 3.0 — CSE Freshers' Party invitation">
+<title>Byte Bandits 3.0 | Invitation</title>
+<style>
+:root{
+  --bg:#080a0f; --panel:#10141b; --line:#29303a; --green:#8cffb1;
+  --cream:#f6e8c8; --brown:#4b1713;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+body{background:radial-gradient(circle at 50% 0,#17251e 0,#080a0f 45%);color:#eef2ee;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(140,255,177,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(140,255,177,.05) 1px,transparent 1px);background-size:32px 32px}
+.screen{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative}
+.box{width:min(680px,100%);background:rgba(13,16,22,.92);border:1px solid var(--line);border-radius:22px;box-shadow:0 30px 90px #0008;overflow:hidden}
+.bar{height:42px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 16px;gap:8px;color:#77818d;font:12px ui-monospace,monospace}
+.dot{width:9px;height:9px;border-radius:50%;background:#3d4650}
+.terminal{padding:42px 34px 38px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.kicker{color:var(--green);font-size:12px;letter-spacing:2px}
+h1{font-size:clamp(34px,8vw,64px);line-height:.95;margin:16px 0 12px;letter-spacing:-2px}
+.title{color:#fff}
+.muted{color:#8d97a3;line-height:1.7}
+.prompt{margin:30px 0 8px;color:#7e8995;font-size:13px}
+.cmd{color:var(--green);font-size:14px}
+button{font:inherit;cursor:pointer}
+.primary{margin-top:26px;border:1px solid #6edb94;background:#a5ffc1;color:#06110a;padding:13px 19px;border-radius:12px;font-weight:800;box-shadow:0 0 30px #75ff9a22;transition:.2s}
+.primary:hover{transform:translateY(-2px);box-shadow:0 0 35px #75ff9a55}
+.hidden{display:none!important}
+.verify{text-align:center;padding:44px 28px}
+.verify .emoji{font-size:58px}
+.verify h2{font-size:30px;margin:12px 0}
+.options{display:grid;gap:12px;margin:26px auto;max-width:430px}
+.option{background:#141920;color:#eef2ee;border:1px solid #303944;border-radius:14px;padding:16px;text-align:left;transition:.2s}
+.option:hover{border-color:#8cffb1;transform:translateY(-1px)}
+.option small{display:block;color:#7f8a96;margin-top:4px}
+.result{min-height:92px;color:var(--green);font:14px ui-monospace,monospace;padding:12px;white-space:pre-line}
+.barcode{height:3px;background:linear-gradient(90deg,transparent,#8cffb1,transparent);animation:scan 1.2s infinite}
+@keyframes scan{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.invite{min-height:100svh;background:radial-gradient(circle at 50% 0,#4a241c 0,#180f0d 32%,#09090a 72%);padding:28px 14px 45px}
+.invite-inner{width:min(760px,100%);margin:auto;text-align:center}
+.reveal{animation:rise .8s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(25px) scale(.98)}to{opacity:1;transform:none}}
+.smallcaps{letter-spacing:4px;text-transform:uppercase;font-size:11px;color:#d9b894}
+.reveal h2{font-family:Georgia,serif;font-size:clamp(28px,7vw,46px);margin:10px 0 5px;color:#fff1dc}
+.subline{color:#c8b9a7;margin-bottom:22px}
+.card{background:#f2dfb7;padding:8px;border-radius:18px;box-shadow:0 30px 80px #000b;display:inline-block;max-width:100%}
+.card img{display:block;width:100%;max-width:700px;height:auto;border-radius:11px}
+.message{margin:24px auto 0;background:#171113cc;border:1px solid #3a2928;border-radius:18px;padding:24px 20px;max-width:650px;color:#f4e9dc;line-height:1.7}
+.message strong{font-family:Georgia,serif;font-size:20px}
+.sender{margin-top:13px;color:#d9b894;font-weight:700}
+.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px}
+.secondary{background:#171b21;color:#f2f4f3;border:1px solid #39414c;padding:12px 17px;border-radius:12px;font-weight:700}
+.footer{margin-top:30px;color:#727b85;font:11px ui-monospace,monospace;letter-spacing:1px}
+</style>
+</head>
+<body>
+
+<section id="welcome" class="screen">
+  <div class="box">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:8px">cse://invitation</span></div>
+    <div class="terminal">
+      <div class="kicker">CSE NETWORK // INCOMING TRANSMISSION</div>
+      <h1><span class="title">BYTE BANDITS</span><br><span style="color:var(--green)">3.0</span></h1>
+      <p class="muted">A new invitation packet has arrived.<br>Authentication is required before opening.</p>
+      <div class="prompt">$ system.check()</div>
+      <div class="cmd">&gt; invitation_found = TRUE</div>
+      <div class="cmd">&gt; access_level = GUEST</div>
+      <button class="primary" onclick="showVerify()">[ ACCESS INVITATION ]</button>
+    </div>
+  </div>
+</section>
+
+<section id="verify" class="screen hidden">
+  <div class="box">
+    <div class="bar"><span>security_check.exe</span></div>
+    <div class="verify">
+      <div class="emoji">🧬</div>
+      <h2>One tiny security check.</h2>
+      <p class="muted">Before we continue...<br><b style="color:#fff">Are you Homo sapiens or a robot?</b></p>
+      <div class="options">
+        <button class="option" onclick="verifyHuman()">🧍 <b>Homo sapiens</b><small>Yes, definitely biological.</small></button>
+        <button class="option" onclick="robot()">🤖 <b>Robot</b><small>Beep boop. Suspicious.</small></button>
+      </div>
+      <div id="result" class="result"></div>
+      <div id="continueWrap" class="hidden"><button class="primary" onclick="openInvite()">[ ENTER THE INVITATION ]</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="invite" class="invite hidden">
+  <div class="invite-inner reveal">
+    <div class="smallcaps">Connection established</div>
+    <h2>You've been officially invited.</h2>
+    <div class="subline">Department of Computer Science &amp; Engineering</div>
+
+    <div class="card">
+      <img src="invitation.png" alt="Byte Bandits 3.0 invitation card">
+    </div>
+
+    <div class="message">
+      <strong>Respected Sir/Ma’am,</strong><br>
+      You are cordially invited to <b>Byte Bandits 3.0</b>, our CSE Freshers’ Party.<br>
+      We would be honoured to have your presence.<br>
+      See you there!
+      <div class="sender">— Department of CSE</div>
+    </div>
+
+    <div class="actions">
+      <button class="secondary" onclick="shareInvite()">↗ Share Invitation</button>
+      <button class="secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Back to top</button>
+    </div>
+    <div class="footer">INVITATION DELIVERED SUCCESSFULLY // BYTE BANDITS 3.0</div>
+  </div>
+</section>
+
+<script>
+function showVerify(){
+  document.getElementById('welcome').classList.add('hidden');
+  document.getElementById('verify').classList.remove('hidden');
+}
+function verifyHuman(){
+  const r=document.getElementById('result');
+  r.textContent="Scanning species...\nDNA scan ██████████████████ 100%\n\n🧬 Homo sapiens detected.\nCongratulations. You may proceed. 💀";
+  document.getElementById('continueWrap').classList.remove('hidden');
+}
+function robot(){
+  const r=document.getElementById('result');
+  r.textContent="🤨 Interesting choice.\n\nRunning additional tests...\nBEEP BOOP ████████░░ 80%\n\nERROR: Too suspicious.\nPlease select Homo sapiens.";
+}
+function openInvite(){
+  document.getElementById('verify').classList.add('hidden');
+  document.getElementById('invite').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+async function shareInvite(){
+  const data={title:'Byte Bandits 3.0 — Invitation',text:'You are cordially invited to Byte Bandits 3.0, our CSE Freshers’ Party.'};
+  if(navigator.share){ try{ await navigator.share(data); }catch(e){} }
+  else alert('Copy this website link from your browser and send it on WhatsApp.');
+}
+</script>
+</body>
+</html>
