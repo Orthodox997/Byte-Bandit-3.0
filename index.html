@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Byte Bandits 3.0 - The Lost Invitation</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: #05080d;
+    color: #f3e3bd;
+    font-family: Georgia, "Times New Roman", serif;
+    overflow: hidden;
+  }
+
+  .screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.2s ease, visibility 1.2s;
+    padding: 24px 18px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .screen.active { opacity: 1; visibility: visible; }
+
+  /* ---------- SCREEN 1: Night sea ---------- */
+  #screen1 {
+    background: linear-gradient(to bottom, #04060b 0%, #0b1622 45%, #0d2233 70%, #061018 100%);
+  }
+  .moon {
+    position: absolute;
+    top: 9%;
+    left: 50%;
+    width: 64px; height: 64px;
+    margin-left: -32px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff9e6, #e8d9a8 60%, #b8a46e);
+    box-shadow: 0 0 40px 12px rgba(255,240,190,0.35);
+    animation: moonGlow 6s ease-in-out infinite;
+  }
+  @keyframes moonGlow {
+    50% { box-shadow: 0 0 60px 20px rgba(255,240,190,0.5); }
+  }
+  .stars {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 15%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 8%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 85% 22%, #fff8dc, transparent),
+      radial-gradient(1px 1px at 40% 28%, #fff, transparent),
+      radial-gradient(1px 1px at 12% 34%, #fff, transparent);
+    animation: twinkle 4s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle { to { opacity: 0.5; } }
+
+  .castle {
+    position: absolute;
+    right: 6%;
+    bottom: 36%;
+    width: 110px;
+    opacity: 0.85;
+  }
+  .castle-glow {
+    position: absolute;
+    right: 14%;
+    bottom: 40%;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,190,90,0.5), transparent 70%);
+    animation: flicker 2.5s infinite;
+  }
+  @keyframes flicker { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+  .sea {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 42%;
+    background: linear-gradient(to bottom, #0b2536, #04111b);
+    overflow: hidden;
+  }
+  .wave {
+    position: absolute;
+    left: -50%;
+    width: 200%;
+    height: 40px;
+    background-repeat: repeat-x;
+    opacity: 0.6;
+  }
+  .wave.w1 { top: 10px; animation: wave 9s linear infinite; background-image: radial-gradient(ellipse 60px 20px at 50% 100%, rgba(120,170,190,0.35), transparent); background-size: 120px 40px; }
+  .wave.w2 { top: 45px; animation: wave 6s linear infinite reverse; background-image: radial-gradient(ellipse 80px 20px at 50% 100%, rgba(120,170,190,0.25), transparent); background-size: 160px 40px; }
+  .wave.w3 { top: 85px; animation: wave 12s linear infinite; background-image: radial-gradient(ellipse 100px 25px at 50% 100%, rgba(120,170,190,0.2), transparent); background-size: 200px 50px; }
+  @keyframes wave { to { transform: translateX(50%); } }
+
+  .ship {
+    position: absolute;
+    bottom: 30%;
+    left: 50%;
+    width: 180px;
+    margin-left: -90px;
+    animation: sail 7s ease-in-out infinite;
+  }
+  @keyframes sail {
+    0%,100% { transform: translateX(-10px) rotate(-1deg); }
+    50% { transform: translateX(10px) rotate(1deg); }
+  }
+  .ship-bob { animation: bob 3.2s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(4px) rotate(0.6deg); } }
+
+  .intro-text {
+    position: relative;
+    z-index: 2;
+    margin-top: -24vh;
+    max-width: 320px;
+  }
+  .intro-text h1 {
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
+    font-weight: normal;
+    letter-spacing: 1px;
+    color: #f6dc9b;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.8);
+    line-height: 1.35;
+    opacity: 0;
+    animation: fadeUp 1.4s ease 0.3s forwards;
+  }
+  .intro-text .sub {
+    margin-top: 14px;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: #d8c28b;
+    opacity: 0;
+    animation: fadeUp 1.4s ease 1.2s forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .letter-ashore {
+    position: absolute;
+    bottom: 22%;
+    left: 14%;
+    width: 36px;
+    height: 26px;
+    background: linear-gradient(#f4e2b4, #d9bd82);
+    border-radius: 2px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    animation: drift 5s ease-in-out infinite;
+  }
+  @keyframes drift {
+    0%,100% { transform: translate(0,0) rotate(-6deg); }
+    50% { transform: translate(6px,-4px) rotate(4deg); }
+  }
+
+  .btn {
+    position: relative;
+    z-index: 2;
+    font-family: inherit;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #f6dc9b;
+    background: rgba(20,14,6,0.7);
+    border: 1px solid #b8914d;
+    padding: 14px 26px;
+    cursor: pointer;
+    box-shadow: 0 0 18px rgba(214,167,80,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:hover, .btn:active {
+    transform: scale(1.04);
+    box-shadow: 0 0 26px rgba(214,167,80,0.5);
+  }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .btn-wrap { position: relative; z-index: 2; margin-top: 26vh; animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: 0.75; } }
+
+  /* ---------- SCREEN 2: Treasure chest + captcha ---------- */
+  #screen2 {
+    background: radial-gradient(ellipse at 50% 40%, #3a2412 0%, #1a0f07 60%, #080503 100%);
+  }
+  .lantern-glow {
+    position: absolute;
+    top: 8%; left: 10%;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,170,70,0.35), transparent 70%);
+    animation: flicker 2s infinite;
+  }
+  .lantern-glow.r { left: auto; right: 8%; top: 14%; }
+
+  .seal-title {
+    font-size: 1.15rem;
+    color: #f6dc9b;
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .seal-sub {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #c7a86a;
+    margin-bottom: 22px;
+  }
+
+  .chest-wrap {
+    position: relative;
+    width: 260px;
+    height: 170px;
+    margin-bottom: 18px;
+  }
+  .chest-body {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 96px;
+    background: linear-gradient(#5a3a20, #2e1d0f);
+    border: 3px solid #1a0f06;
+    border-radius: 0 0 6px 6px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 10px 25px rgba(0,0,0,0.6);
+  }
+  .chest-body::before, .chest-body::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 10px;
+    background: linear-gradient(#8b8b8b, #3d3d3d);
+    border-left: 1px solid #222;
+    border-right: 1px solid #222;
+  }
+  .chest-body::before { left: 22px; }
+  .chest-body::after { right: 22px; }
+  .chest-lid {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 82px;
+    background: linear-gradient(#7a4e2b, #4a2e18);
+    border: 3px solid #1a0f06;
+    border-radius: 130px 130px 0 0 / 60px 60px 0 0;
+    transform-origin: bottom center;
+    transition: transform 1.6s cubic-bezier(.6,-0.2,.3,1.2);
+    box-shadow: inset 0 -6px 14px rgba(0,0,0,0.5);
+  }
+  .chest-lid.open { transform: perspective(400px) rotateX(-110deg); }
+  .chest-lock {
+    position: absolute;
+    left: 50%;
+    top: 84px;
+    width: 30px; height: 34px;
+    margin-left: -15px;
+    background: linear-gradient(#f6dc9b, #b8914d);
+    border-radius: 4px 4px 6px 6px;
+    border: 2px solid #3b2810;
+    transition: transform 0.8s ease;
+    z-index: 3;
+  }
+  .chest-lock::before {
+    content: "";
+    position: absolute;
+    top: -20px; left: 4px;
+    width: 18px; height: 18px;
+    border: 4px solid #b8914d;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+  }
+  .chest-lock.unlocked { transform: rotate(-30deg) translateY(-6px); }
+  .glow-inside {
+    position: absolute;
+    left: 10%; right: 10%;
+    top: 40px; height: 60px;
+    background: radial-gradient(ellipse, rgba(255,215,120,0.9), transparent 70%);
+    opacity: 0;
+    transition: opacity 1s ease 0.8s;
+    z-index: 1;
+  }
+  .glow-inside.on { opacity: 1; }
+
+  .captcha {
+    width: 100%;
+    max-width: 300px;
+    background: rgba(18,11,5,0.75);
+    border: 1px solid #6e4f22;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .captcha label {
+    display: block;
+    font-size: 0.9rem;
+    color: #e6cd98;
+    margin-bottom: 10px;
+  }
+  .captcha-row { display: flex; gap: 8px; justify-content: center; }
+  .captcha input {
+    width: 90px;
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 9px;
+    background: #2a1b0c;
+    color: #f6dc9b;
+    border: 1px solid #8a6a32;
+    text-align: center;
+    outline: none;
+  }
+  .captcha input:focus { border-color: #d6a750; }
+  .captcha .small-btn {
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 9px 14px;
+    background: #6e4a1c;
+    color: #f6dc9b;
+    border: 1px solid #b8914d;
+    cursor: pointer;
+  }
+  .captcha .msg {
+    min-height: 1.2em;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: #e0a06a;
+  }
+  .captcha .msg.ok { color: #9fd08a; }
+  .shake { animation: shake 0.4s; }
+  @keyframes shake {
+    20%,60% { transform: translateX(-6px); }
+    40%,80% { transform: translateX(6px); }
+  }
+
+  .unlock-btn.hidden { display: none; }
+  .tap-hint {
+    font-size: 0.75rem;
+    color: #a88850;
+    letter-spacing: 1px;
+    margin-top: 10px;
+  }
+
+  /* ---------- SCREEN 3: Scroll reveal ---------- */
+  #screen3 {
+    background: radial-gradient(ellipse at 50% 35%, #2a1a0d 0%, #0d0704 70%);
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding-top: 40px;
+  }
+  .scroll {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    margin: 20px auto 30px;
+    transform: scaleY(0.05);
+    transform-origin: top center;
+    transition: transform 2.2s cubic-bezier(.2,.8,.2,1);
+  }
+  .scroll.open { transform: scaleY(1); }
+
+  .scroll-paper {
+    background: #f4e6c4;
+    border-left: 10px solid #d9bd82;
+    border-right: 10px solid #d9bd82;
+    border-radius: 6px;
+    padding: 14px 10px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.6), inset 0 0 40px rgba(120,80,30,0.25);
+  }
+  .scroll-roller {
+    height: 26px;
+    background: linear-gradient(#e8cd8e, #a77c3c, #e8cd8e);
+    border-radius: 13px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  }
+  .card-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 1.4s ease 1.6s;
+  }
+  .scroll.open .card-img { opacity: 1; }
+
+  .letter-text {
+    margin-top: 22px;
+    text-align: left;
+    background: rgba(20,12,6,0.85);
+    border: 1px solid #6e4f22;
+    padding: 20px 18px;
+    max-width: 380px;
+    width: 100%;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #f0dca8;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 1.2s ease 2.4s, transform 1.2s ease 2.4s;
+  }
+  .letter-text.show { opacity: 1; transform: translateY(0); }
+  .letter-text p { margin-bottom: 10px; }
+  .letter-text .sign {
+    text-align: right;
+    font-style: italic;
+    color: #c7a86a;
+    margin-top: 12px;
+  }
+
+  /* ---------- Sound toggle ---------- */
+  #soundBtn {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 100;
+    font-family: inherit;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: #f6dc9b;
+    background: rgba(10,6,3,0.7);
+    border: 1px solid #8a6a32;
+    padding: 7px 11px;
+    cursor: pointer;
+    display: none;
+  }
+  #soundBtn.visible { display: block; }
+
+  /* ---------- Desktop scaling ---------- */
+  @media (min-width: 700px) {
+    .intro-text h1 { font-size: 3rem; max-width: 600px; }
+    .chest-wrap { width: 340px; height: 210px; }
+    .chest-body { height: 120px; }
+    .chest-lid { height: 100px; }
+    .chest-lock { top: 104px; }
+    .scroll { max-width: 520px; }
+    .letter-text { max-width: 520px; }
+    .captcha { max-width: 380px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background music: put music.mp3 in the same folder as this file -->
+<audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
+
+<!-- ========== SCREEN 1 ========== -->
+<section class="screen active" id="screen1">
+  <div class="stars"></div>
+  <div class="moon"></div>
+
+  <svg class="castle" viewBox="0 0 120 130" aria-hidden="true">
+    <path d="M10 130 V60 H25 V45 H35 V60 H45 V30 H55 V15 L60 5 L65 15 V30 H75 V60 H85 V45 H95 V60 H110 V130 Z" fill="#0a1620"/>
+    <rect x="48" y="90" width="10" height="14" fill="#f3b766" opacity="0.9"/>
+    <rect x="30" y="70" width="5" height="7" fill="#f3b766" opacity="0.8"/>
+    <rect x="88" y="70" width="5" height="7" fill="#f3b766" opacity="0.8"/>
+  </svg>
+  <div class="castle-glow"></div>
+
+  <div class="sea">
+    <div class="wave w1"></div>
+    <div class="wave w2"></div>
+    <div class="wave w3"></div>
+  </div>
+
+  <svg class="ship" viewBox="0 0 200 150" aria-hidden="true">
+    <g class="ship-bob">
+      <path d="M100 20 L100 110" stroke="#1a1005" stroke-width="3"/>
+      <path d="M100 25 L60 95 L100 95 Z" fill="#c9bfa5" opacity="0.92"/>
+      <path d="M100 40 L140 100 L100 100 Z" fill="#b8ae94" opacity="0.92"/>
+      <path d="M100 30 L100 92 L55 92 Z" fill="#d9d0b6" opacity="0.4"/>
+      <path d="M100 10 L112 16 L100 22 Z" fill="#2a1a0c"/>
+      <path d="M20 110 Q100 135 180 110 L165 128 Q100 145 35 128 Z" fill="#2a1a0c"/>
+      <path d="M30 112 Q100 128 170 112" stroke="#6b4a24" stroke-width="2" fill="none"/>
+      <rect x="82" y="100" width="6" height="6" fill="#ffcc66"/>
+      <rect x="112" y="100" width="6" height="6" fill="#ffcc66"/>
+    </g>
+  </svg>
+
+  <div class="letter-ashore"></div>
+
+  <div class="intro-text">
+    <h1>Some invitations are delivered...<br>and some are discovered.</h1>
+    <p class="sub">A message has washed ashore.</p>
+  </div>
+
+  <div class="btn-wrap">
+    <button class="btn" id="beginBtn">Begin the Journey &rarr;</button>
+  </div>
+</section>
+
+<!-- ========== SCREEN 2 ========== -->
+<section class="screen" id="screen2">
+  <div class="lantern-glow"></div>
+  <div class="lantern-glow r"></div>
+
+  <p class="seal-title">A Sealed Invitation has been found.</p>
+  <p class="seal-sub">The seal will only open for the curious.</p>
+
+  <div class="chest-wrap">
+    <div class="glow-inside" id="glowInside"></div>
+    <div class="chest-body"></div>
+    <div class="chest-lid" id="chestLid"></div>
+    <div class="chest-lock" id="chestLock"></div>
+  </div>
+
+  <div class="captcha" id="captchaBox">
+    <label for="answer">Prove you're no robot, matey. What is <span id="qA">3</span> + <span id="qB">4</span>?</label>
+    <div class="captcha-row">
+      <input type="number" id="answer" inputmode="numeric" placeholder="?" autocomplete="off">
+      <button class="small-btn" id="checkBtn">Check</button>
+    </div>
+    <div class="msg" id="captchaMsg"></div>
+  </div>
+
+  <button class="btn unlock-btn hidden" id="unlockBtn" disabled>Tap to Unlock</button>
+  <p class="tap-hint" id="tapHint">Solve the riddle to reveal the seal</p>
+</section>
+
+<!-- ========== SCREEN 3 ========== -->
+<section class="screen" id="screen3">
+  <div class="scroll" id="scroll">
+    <div class="scroll-roller"></div>
+    <div class="scroll-paper">
+      <img class="card-img" src="1000307545.png" alt="Byte Bandits 3.0 Freshers Party invitation card">
+    </div>
+    <div class="scroll-roller"></div>
+  </div>
+
+  <div class="letter-text" id="letterText">
+    <p>Respected Sir/Ma'am,</p>
+    <p>You are cordially invited to <strong>Byte Bandits 3.0</strong>, our CSE Freshers' Party.</p>
+    <p>We would be honoured to have your presence.</p>
+    <p>See you there!</p>
+    <p class="sign">&mdash; Department of CSE</p>
+  </div>
+</section>
+
+<button id="soundBtn">&#9836; Sound: On</button>
+
+<script>
+(function () {
+  const music = document.getElementById('bgMusic');
+  const soundBtn = document.getElementById('soundBtn');
+  music.volume = 0.6;
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  // ---------- Screen 1 -> 2 ----------
+  document.getElementById('beginBtn').addEventListener('click', () => {
+    music.play().catch(() => {});
+    soundBtn.classList.add('visible');
+    showScreen('screen2');
+  });
+
+  // ---------- Sound toggle ----------
+  soundBtn.addEventListener('click', () => {
+    music.muted = !music.muted;
+    soundBtn.innerHTML = music.muted ? '&#9836; Sound: Off' : '&#9836; Sound: On';
+  });
+
+  // ---------- Captcha ----------
+  let a, b;
+  function newQuestion() {
+    a = Math.floor(Math.random() * 8) + 2;
+    b = Math.floor(Math.random() * 8) + 2;
+    document.getElementById('qA').textContent = a;
+    document.getElementById('qB').textContent = b;
+    document.getElementById('answer').value = '';
+  }
+  newQuestion();
+
+  const answerInput = document.getElementById('answer');
+  const captchaMsg = document.getElementById('captchaMsg');
+  const captchaBox = document.getElementById('captchaBox');
+  const unlockBtn = document.getElementById('unlockBtn');
+  const tapHint = document.getElementById('tapHint');
+  let verified = false;
+
+  function checkAnswer() {
+    if (verified) return;
+    const val = parseInt(answerInput.value, 10);
+    if (val === a + b) {
+      verified = true;
+      captchaMsg.textContent = 'Correct! The seal stirs...';
+      captchaMsg.classList.add('ok');
+      answerInput.disabled = true;
+      document.getElementById('checkBtn').disabled = true;
+      unlockBtn.classList.remove('hidden');
+      unlockBtn.disabled = false;
+      tapHint.textContent = '';
+    } else {
+      captchaMsg.classList.remove('ok');
+      captchaMsg.textContent = 'Not quite, try again!';
+      captchaBox.classList.remove('shake');
+      void captchaBox.offsetWidth;
+      captchaBox.classList.add('shake');
+      newQuestion();
+    }
+  }
+
+  document.getElementById('checkBtn').addEventListener('click', checkAnswer);
+  answerInput.addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+
+  // ---------- Unlock -> chest opens -> Screen 3 ----------
+  unlockBtn.addEventListener('click', () => {
+    if (unlockBtn.disabled) return;
+    unlockBtn.disabled = true;
+    document.getElementById('chestLock').classList.add('unlocked');
+    setTimeout(() => {
+      document.getElementById('chestLid').classList.add('open');
+      document.getElementById('glowInside').classList.add('on');
+    }, 800);
+    setTimeout(() => {
+      showScreen('screen3');
+      setTimeout(() => document.getElementById('scroll').classList.add('open'), 300);
+      setTimeout(() => document.getElementById('letterText').classList.add('show'), 300);
+    }, 2600);
+  });
+})();
+</script>
+</body>
+</html>
